@@ -1,6 +1,6 @@
 # Documentação ERS da Autoescola São Cristóvão (SC+) 
 
-- Projeto de estágio, realização de um sistema para uma autoescola com controle de agendamento, históricos e pagamentos.
+- Projeto de estágio, realização de um sistema para uma autoescola com controle de agendamento, histórico e pagamentos.
 
 ## Funcionalidades
 
