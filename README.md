@@ -4,7 +4,7 @@
 
 ## Funcionalidades
 
-- Sistema capaz de realizar o cadastro de alunos, instrutores, veículos, aulas e tipos de carta; 
+- Sistema capaz de realizar o cadastro de alunos, instrutores, veículos, aulas e tipos de carta.
 
 ## Tecnologias utilizadas
 
