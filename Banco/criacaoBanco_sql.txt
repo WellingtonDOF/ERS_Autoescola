@@ -1,0 +1,146 @@
+-- Criação da tabela Permissao
+CREATE TABLE Permissao (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tipoPermissao VARCHAR(50) UNIQUE NOT NULL
+);
+
+-- Criação da tabela Pessoa
+CREATE TABLE Pessoa (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nomeCompleto VARCHAR(255) NOT NULL,
+    cpf VARCHAR(14) UNIQUE NOT NULL,
+    endereco VARCHAR(255),
+    telefone VARCHAR(15),
+    email VARCHAR(255),
+    dataNascimento DATE,
+    tipoPermissaoId INT NOT NULL,
+    status BOOLEAN,
+    FOREIGN KEY (tipoPermissaoId) REFERENCES Permissao(id)
+);
+
+-- Criação da tabela Aluno
+CREATE TABLE Aluno (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    categoriaCNH VARCHAR(10),
+    statusPagamento VARCHAR(20),
+    statusCurso VARCHAR(20),
+    statusAluno BOOLEAN,
+    pessoaId INT NOT NULL,
+    FOREIGN KEY (pessoaId) REFERENCES Pessoa(id)
+);
+
+-- Criação da tabela Matricula (com campos atualizados)
+CREATE TABLE Matricula (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    alunoId INT NOT NULL,
+    quantidadeAulaTotal INT NOT NULL,
+    dataInicio DATE NOT NULL,
+    dataFim DATE,
+    categoriaPlano VARCHAR(50) NOT NULL,
+    statusMatricula VARCHAR(20) NOT NULL,
+    FOREIGN KEY (alunoId) REFERENCES Aluno(id)
+);
+
+-- Criação da tabela Instrutor
+CREATE TABLE Instrutor (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    categoriaCNH VARCHAR(10),
+    dataAdmissao DATE,
+    statusInstrutor BOOLEAN,
+    pessoaId INT NOT NULL,
+    FOREIGN KEY (pessoaId) REFERENCES Pessoa(id)
+);
+
+-- Criação da tabela Aulas
+CREATE TABLE Aulas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tipoAula VARCHAR(50) NOT NULL,
+    descricao VARCHAR(255)
+);
+
+-- Criação da tabela Veiculo
+CREATE TABLE Veiculo (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    placa VARCHAR(10) UNIQUE NOT NULL,
+    modelo VARCHAR(50),
+    marca VARCHAR(50),
+    anoFabricacao YEAR,
+    categoria VARCHAR(10),
+    dataAquisicao DATE,
+    statusVeiculo VARCHAR(20)
+);
+
+-- Criação da tabela Agendamento
+CREATE TABLE Agendamento (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    data DATE,
+    horario TIME,
+    horaFim INT,
+    aulaId INT NOT NULL,
+    instrutorId INT NULL,
+    veiculoId INT NULL,
+    matriculaId INT NOT NULL,
+    statusAula VARCHAR(20),
+    statusComparecimento VARCHAR(20),
+    FOREIGN KEY (aulaId) REFERENCES Aulas(id),
+    FOREIGN KEY (instrutorId) REFERENCES Instrutor(id),
+    FOREIGN KEY (veiculoId) REFERENCES Veiculo(id),
+    FOREIGN KEY (matriculaId) REFERENCES Matricula(id)
+);
+
+-- Criação da tabela HistoricoAula 
+CREATE TABLE HistoricoAula (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    alunoId INT NOT NULL,
+    instrutorId INT,
+    veiculoId INT,
+    aulaId INT NOT NULL,
+    matriculaId INT NOT NULL,
+    dataAula DATE NOT NULL,
+    horario TIME NOT NULL,
+    statusAula VARCHAR(20) NOT NULL,
+    resultadoProva VARCHAR(20),
+    FOREIGN KEY (alunoId) REFERENCES Aluno(id),
+    FOREIGN KEY (instrutorId) REFERENCES Instrutor(id),
+    FOREIGN KEY (veiculoId) REFERENCES Veiculo(id),
+    FOREIGN KEY (aulaId) REFERENCES Aulas(id),
+    FOREIGN KEY (matriculaId) REFERENCES Matricula(id)
+);
+
+-- Criação da tabela Pagamento
+CREATE TABLE Pagamento (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    valorTotal DOUBLE,
+    dataPagamento DATE,
+    statusPagamento VARCHAR(20),
+    formaPagamento VARCHAR(20),
+    matriculaId INT,
+    FOREIGN KEY (matriculaId) REFERENCES Matricula(id)
+);
+
+-- Criação da tabela Parcelas
+CREATE TABLE Parcelas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    numeroParcela INT,
+    valor FLOAT,
+    statusParcela VARCHAR(20),
+    dataVencimento DATE,
+    pagamentoId INT,
+    FOREIGN KEY (pagamentoId) REFERENCES Pagamento(id)
+);
+
+-- Criação da tabela Notificacao
+CREATE TABLE Notificacao (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    agendamentoId INT NOT NULL,
+    tipoNotificacao VARCHAR(50),
+    mensagem VARCHAR(255),
+    statusNotificacao VARCHAR(20),
+    dataEnvio DATE,
+    meioEnvio VARCHAR(50),
+    alunoId INT,
+    instrutorId INT,
+    FOREIGN KEY (agendamentoId) REFERENCES Agendamento(id),
+    FOREIGN KEY (alunoId) REFERENCES Aluno(id),
+    FOREIGN KEY (instrutorId) REFERENCES Instrutor(id)
+);
